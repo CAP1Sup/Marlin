@@ -32,7 +32,23 @@
  *  RAMPS_14_EEF (Hotend0, Hotend1, Fan)
  *  RAMPS_14_SF  (Spindle, Controller Fan)
  */
-
+/* Pins unable to recieve 5v:
+0 - P0_3 - R Serial 1
+1 - P0_2 - T Serial 1
+16 - P0_16 -
+17 - P0_18 -
+23 - P0_15 -
+31 - P3_26 -
+33 - P3_25 -
+35 - P2_11 -
+37 - P1_30 -
+49 - P1_31 -
+50 - P0_17 -
+51 - P0_18 -
+52 - P0_15 -
+53 - P1_23 -
+A9  -P0_26 -
+*/
 // Numbers in parentheses () are the corresponding mega2560 pin numbers
 
 #if NOT_TARGET(MCU_LPC1768)
@@ -40,6 +56,12 @@
 #endif
 
 #define BOARD_INFO_NAME "Re-ARM RAMPS 1.4"
+
+//
+// EEPROM
+//
+#define FLASH_EEPROM_EMULATION
+//#define SDCARD_EEPROM_EMULATION
 
 //
 // Servos
@@ -53,11 +75,11 @@
 // Limit Switches
 //
 #define X_MIN_PIN                          P1_24  // ( 3) 10k pullup to 3.3V, 1K series
-#define X_MAX_PIN                          P1_25  // ( 2) 10k pullup to 3.3V, 1K series
+//#define X_MAX_PIN                        P1_25  // ( 2) 10k pullup to 3.3V, 1K series
 #define Y_MIN_PIN                          P1_26  // (14) 10k pullup to 3.3V, 1K series
-#define Y_MAX_PIN                          P1_27  // (15) 10k pullup to 3.3V, 1K series
+//#define Y_MAX_PIN                        P1_27  // (15) 10k pullup to 3.3V, 1K series
 #define Z_MIN_PIN                          P1_29  // (18) 10k pullup to 3.3V, 1K series
-#define Z_MAX_PIN                          P1_28  // (19) 10k pullup to 3.3V, 1K series
+//#define Z_MAX_PIN                        P1_28  // (19) 10k pullup to 3.3V, 1K series
 #define ONBOARD_ENDSTOPPULLUPS                    // Board has built-in pullups
 
 //
@@ -67,35 +89,48 @@
 #define X_DIR_PIN                          P0_11  // (55)
 #define X_ENABLE_PIN                       P0_10  // (38)
 #ifndef X_CS_PIN
-  #define X_CS_PIN                         P1_01  // ETH
+  #define X_CS_PIN                         P1_04  // ETH
 #endif
 
 #define Y_STEP_PIN                         P2_02  // (60)
 #define Y_DIR_PIN                          P0_20  // (61)
 #define Y_ENABLE_PIN                       P0_19  // (56)
 #ifndef Y_CS_PIN
-  #define Y_CS_PIN                         P1_04  // ETH
+  #define Y_CS_PIN                         P1_09  // ETH
 #endif
 
-#define Z_STEP_PIN                         P2_03  // (46)
-#define Z_DIR_PIN                          P0_22  // (48)
-#define Z_ENABLE_PIN                       P0_21  // (62)
+#define Z_STEP_PIN                         P2_00  // (46)
+#define Z_DIR_PIN                          P0_05  // (48)
+#define Z_ENABLE_PIN                       P0_04  // (62)
 #ifndef Z_CS_PIN
-  #define Z_CS_PIN                         P1_10  // ETH
+  #define Z_CS_PIN                         P1_15  // ETH
 #endif
 
-#define E0_STEP_PIN                        P2_00  // (26)
-#define E0_DIR_PIN                         P0_05  // (28)
-#define E0_ENABLE_PIN                      P0_04  // (24)
+#define Z2_STEP_PIN                        P2_08   // (26)
+#define Z2_DIR_PIN                         P2_13   // (28)
+#define Z2_ENABLE_PIN                      P4_29   // (24)
+#ifndef Z2_CS_PIN
+  #define Z2_CS_PIN                        P1_16   // ETH
+#endif
+
+#define E0_STEP_PIN                        P2_03  // (26)								  
+#define E0_DIR_PIN                         P0_22  // (34)
+#define E0_ENABLE_PIN                      P0_21  // (30)
 #ifndef E0_CS_PIN
-  #define E0_CS_PIN                        P1_14  // ETH
+  #define E0_CS_PIN                        -1     // ETH
 #endif
 
-#define E1_STEP_PIN                        P2_08  // (36)
-#define E1_DIR_PIN                         P2_13  // (34)
-#define E1_ENABLE_PIN                      P4_29  // (30)
+#define E1_STEP_PIN                        P1_25  // X_MAX
+#define E1_DIR_PIN                         P1_27  // Y_MAX
+#define E1_ENABLE_PIN                      P1_28  // Z_MAX
 #ifndef E1_CS_PIN
   #define E1_CS_PIN                        -1
+#define E2_STEP_PIN       P0_00 //I2C pin 20
+#define E2_DIR_PIN        P0_01 //I2C pin 21
+#define E2_ENABLE_PIN     P0_25 //T2 Output
+#ifndef E2_CS_PIN
+  #define E2_CS_PIN        -1
+#endif 
 #endif
 
 //
@@ -228,11 +263,11 @@
 
 #ifndef FAN_PIN
   #if EITHER(IS_RAMPS_EFB, IS_RAMPS_EFF)          // Hotend, Fan, Bed or Hotend, Fan, Fan
-    #define FAN_PIN                 RAMPS_D9_PIN
+    #define FAN_PIN                 P1_19
   #elif EITHER(IS_RAMPS_EEF, IS_RAMPS_SF)         // Hotend, Hotend, Fan or Spindle, Fan
     #define FAN_PIN                 RAMPS_D8_PIN
   #elif ENABLED(IS_RAMPS_EEB)                     // Hotend, Hotend, Bed
-    #define FAN_PIN                        P1_18  // (4) IO pin. Buffer needed
+    #define FAN_PIN                 P1_18         // (4) IO pin. Buffer needed
   #else                                           // Non-specific are "EFB" (i.e., "EFBF" or "EFBE")
     #define FAN_PIN                 RAMPS_D9_PIN
   #endif
@@ -245,10 +280,10 @@
 
 // define digital pin 5 for the filament runout sensor. Use the RAMPS 1.4 digital input 5 on the servos connector
 #ifndef FIL_RUNOUT_PIN
-  #define FIL_RUNOUT_PIN                   P1_19  // (5)
+  //#define FIL_RUNOUT_PIN                   P1_19  // (5)
 #endif
 
-#define PS_ON_PIN                          P2_12  // (12)
+#define PS_ON_PIN                          -1    // (12)
 
 #if !defined(MAX6675_SS_PIN) && DISABLED(USE_ZMAX_PLUG)
   #define MAX6675_SS_PIN                   P1_28
@@ -272,9 +307,9 @@
       #error "LASER_FEATURE requires 3 free servo pins."
     #endif
   #endif
-  #define SPINDLE_LASER_ENA_PIN       SERVO1_PIN  // (6) Pin should have a pullup/pulldown!
-  #define SPINDLE_LASER_PWM_PIN       SERVO3_PIN  // (4) MUST BE HARDWARE PWM
-  #define SPINDLE_DIR_PIN             SERVO2_PIN  // (5)
+  #define SPINDLE_LASER_ENA_PIN            P1_21  // (6) Pin should have a pullup/pulldown!
+  //#define SPINDLE_LASER_PWM_PIN       SERVO3_PIN  // (4) MUST BE HARDWARE PWM
+  //#define SPINDLE_DIR_PIN             SERVO2_PIN  // (5)
 #endif
 
 //
@@ -355,7 +390,7 @@
   #define SD_DETECT_PIN                    P1_31  // (49) J3-1 & AUX-3 (NOT 5V tolerant)
   #define KILL_PIN                         P1_22  // (41) J5-4 & AUX-4
   #define LCD_PINS_RS                      P0_16  // (16) J3-7 & AUX-4
-  #define LCD_SDSS                         P1_23  // (53) J3-5 & AUX-3
+  #define LCD_SDSS                         P0_16  // (53) J3-5 & AUX-3
 
   #if ENABLED(NEWPANEL)
     #if ENABLED(REPRAPWORLD_KEYPAD)
@@ -441,13 +476,13 @@
   #define ENET_RX_ER                       P1_14  // (73)  J12-6
   #define ENET_RXD1                        P1_10  // (75)  J12-8
 #endif
-#define ENET_MOC                           P1_16  // (70)  J12-3
-#define REF_CLK                            P1_15  // (72)  J12-5
-#define ENET_RXD0                          P1_09  // (74)  J12-7
-#define ENET_CRS                           P1_08  // (76)  J12-9
-#define ENET_TX_EN                         P1_04  // (77)  J12-10
-#define ENET_TXD0                          P1_00  // (78)  J12-11
-#define ENET_TXD1                          P1_01  // (79)  J12-12
+//#define ENET_MOC                           P1_16  // (70)  J12-3
+//#define REF_CLK                            P1_15  // (72)  J12-5
+//#define ENET_RXD0                          P1_09  // (74)  J12-7
+//#define ENET_CRS                           P1_08  // (76)  J12-9
+//#define ENET_TX_EN                         P1_04  // (77)  J12-10
+//#define ENET_TXD0                          P1_00  // (78)  J12-11
+//#define ENET_TXD1                          P1_01  // (79)  J12-12
 
 //
 // SD Support
@@ -468,7 +503,7 @@
   #define SCK_PIN                          P0_07
   #define MISO_PIN                         P0_08
   #define MOSI_PIN                         P0_09
-  #define SS_PIN               ONBOARD_SD_CS_PIN
+  #define SS_PIN                           ONBOARD_SD_CS_PIN
 #elif SD_CONNECTION_IS(CUSTOM_CABLE)
   #error "No custom SD drive cable defined for this board."
 #endif
@@ -500,6 +535,77 @@
  */
 
  /**
+* Pins available:
+* (Sorted by Arduino logical pin)
+* P0_03 D0 - Not used - Serial 0
+* P0_02 D1 - Not used - Serial 0
+* P1_25 D2 - Not used - XMAX
+* P1_24 D3 - XMIN
+* P1_18 D4 - Servo 3
+* P1_19 D5 - Servo 2
+* P1_21 D6 - Servo 1
+* P2_07 D8 - D8 - Heated bed
+* P2_04 D9 - D9 - Controller fan
+* P2_05 D10 - D10 - Hotend heater
+* P1_20 D11 - Servo 0
+* P2_12 D12 - Not used - PS on
+* P4_28 D13 - Not used - LED pin
+* P1_26 D14 - Y-MIN
+* P1_27 D15 - Y-MAX - E1_STEP_PIN
+* P0_16 D16 - LCD_PINS_RS
+* P1_29 D18 - Z-MIN - BLTouch
+* P1_28 D19 - Z-MAX - E2_STEP_PIN
+* P0_00 D20 - I2C
+* P0_01 D21 - I2C
+* P0_04 D24 - Z_ENABLE_PIN
+* P2_00 D26 - Z_STEP_PIN
+* P0_05 D28 - Z_DIR_PIN
+* P4_29 D30 - Z2_ENABLE_PIN
+* P3_26 D31 - BTN_EN1
+* P3_25 D33 - BTN_EN2
+* P2_13 D34 - Z2_DIR_PIN
+* P2_11 D35 - BTN_ENC
+* P2_08 D36 - Z2_STEP_PIN
+* P1_30 D37 - BEEPER_PIN - NOT 5V tolerant!
+* P0_10 D38 - X_ENABLE_PIN
+* P1_22 D41 - KILL_PIN
+* P2_03 D46 - E0_STEP_PIN
+* P0_22 D48 - E0_DIR_PIN
+* P1_31 D49 - SD_DETECT_PIN - NOT 5V tolerant!
+* P0_17 D50 - MISO_PIN (of LCD SD card) - not used
+* P0_18 D51 - MOSI_PIN (of LCD SD card) - LCD SPI
+* P0_15 D52 - SCK_PIN (of LCD SD card) - LCD SPI
+* P1_23 D53 - SS_PIN (of LCD SD card) - not used
+* P2_01 D54 - X_STEP_PIN
+* P0_11 D55 - X_DIR_PIN
+* P0_19 D56 - Y_ENABLE_PIN
+* P0_27 D57 - Not used - Open collector
+* P0_28 D58 - Not used - Open collector
+* P2_06 D59 - DOGLCD_A0
+* P2_02 D60 - Y_STEP_PIN
+* P0_20 D61 - Y_DIR_PIN
+* P0_21 D62 - E0_ENABLE_PIN
+* P0_26 D63 - DOGLCD_CS
+* P0_23 D67 - Hotend thermistor
+* P0_24 D68 - Bed thermistor
+* P0_25 D69 - Not used - 2nd hotend thermistor
+* P1_16 D70 - Z2_CS_PIN
+* P1_17 D71 - LCD_PINS_D5
+* P1_15 D72 - Z_CS_PIN
+* P1_14 D73 - LCD_PINS_D6
+* P1_09 D74 - Y_CS_PIN
+* P1_10 D75 - LCD_PINS_D7
+* P1_08 D76 - TMC_SW_MOSI
+* P1_04 D77 - X_CS_PIN
+* P1_00 D78 - TMC_SW_MISO
+* P1_01 D79 - TMC_SW_SCK
+* P0_06 D80 - ONBOARD_SD_CS
+* P0_07 D81 - Not used - Nonexistent
+* P0_08 D82 - Not used - Nonexistent
+* P0_09 D83 - Not used - Nonexistent
+*/
+
+/**
   * Special pins
   *   P1_30  (37) (NOT 5V tolerant)
   *   P1_31  (49) (NOT 5V tolerant)
