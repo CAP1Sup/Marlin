@@ -89,14 +89,14 @@ A9  -P0_26 -
 #define X_DIR_PIN                          P0_11  // (55)
 #define X_ENABLE_PIN                       P0_10  // (38)
 #ifndef X_CS_PIN
-  #define X_CS_PIN                         P1_04  // ETH
+  #define X_CS_PIN                         -1     // ETH
 #endif
 
 #define Y_STEP_PIN                         P2_02  // (60)
 #define Y_DIR_PIN                          P0_20  // (61)
 #define Y_ENABLE_PIN                       P0_19  // (56)
 #ifndef Y_CS_PIN
-  #define Y_CS_PIN                         P1_09  // ETH
+  #define Y_CS_PIN                         -1     // ETH
 #endif
 
 #define Z_STEP_PIN                         P2_00  // (46)
@@ -117,21 +117,22 @@ A9  -P0_26 -
 #define E0_DIR_PIN                         P0_22  // (34)
 #define E0_ENABLE_PIN                      P0_21  // (30)
 #ifndef E0_CS_PIN
-  #define E0_CS_PIN                        -1     // ETH
+  #define E0_CS_PIN                        P1_09  // ETH
 #endif
 
-#define E1_STEP_PIN                        P1_25  // X_MAX
-#define E1_DIR_PIN                         P1_27  // Y_MAX
-#define E1_ENABLE_PIN                      P1_28  // Z_MAX
-#ifndef E1_CS_PIN
-  #define E1_CS_PIN                        -1
-#define E2_STEP_PIN       P0_00 //I2C pin 20
-#define E2_DIR_PIN        P0_01 //I2C pin 21
-#define E2_ENABLE_PIN     P0_25 //T2 Output
-#ifndef E2_CS_PIN
-  #define E2_CS_PIN        -1
-#endif 
-#endif
+//#define E1_STEP_PIN                        P1_25  // X_MAX
+//#define E1_DIR_PIN                         P1_27  // Y_MAX
+//#define E1_ENABLE_PIN                      P1_28  // Z_MAX
+//#ifndef E1_CS_PIN
+  //#define E1_CS_PIN                        -1
+//#endif
+//#define E2_STEP_PIN       P0_00 //I2C pin 20
+//#define E2_DIR_PIN        P0_01 //I2C pin 21
+//#define E2_ENABLE_PIN     P0_25 //T2 Output
+//#ifndef E2_CS_PIN
+  //#define E2_CS_PIN        -1
+//#endif 
+
 
 //
 // Software SPI pins for TMC2130 stepper drivers
