@@ -1239,7 +1239,7 @@
 
   // SD Card Sorting options
   #if ENABLED(SDCARD_SORT_ALPHA)
-    #define SDSORT_LIMIT       40     // Maximum number of sorted items (10-256). Costs 27 bytes each.
+    #define SDSORT_LIMIT       20     // Maximum number of sorted items (10-256). Costs 27 bytes each.
     #define FOLDER_SORTING     -1     // -1=above  0=none  1=below
     #define SDSORT_GCODE       true   // Allow turning sorting on/off with LCD and M34 G-code.
     #define SDSORT_USES_STACK  false  // Prefer the stack for pre-sorting to give back some SRAM. (Negated by next 2 options.)
@@ -1785,7 +1785,7 @@
 //
 // G60/G61 Position Save and Return
 //
-#define SAVED_POSITIONS 5         // Each saved position slot costs 12 bytes
+//#define SAVED_POSITIONS 5         // Each saved position slot costs 12 bytes
 
 //
 // G2/G3 Arc Support
@@ -3214,7 +3214,7 @@
  * Add G-codes M810-M819 to define and run G-code macros.
  * Macros are not saved to EEPROM.
  */
-#define GCODE_MACROS
+//#define GCODE_MACROS
 #if ENABLED(GCODE_MACROS)
   #define GCODE_MACROS_SLOTS      10  // Up to 10 may be used
   #define GCODE_MACROS_SLOT_SIZE  50  // Maximum length of a single macro
@@ -3582,7 +3582,7 @@
 //
 // M43 - display pin status, toggle pins, watch pins, watch endstops & toggle LED, test servo probe
 //
-#define PINS_DEBUGGING
+//#define PINS_DEBUGGING
 
 // Enable Marlin dev mode which adds some special commands
 //#define MARLIN_DEV_MODE

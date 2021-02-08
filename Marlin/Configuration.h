@@ -500,10 +500,10 @@
     #define DEFAULT_Kd_LIST { 114.00, 114.00 }
   #else
 	// ANET A8 Bondtech Clone (Measured with silicone sock)
-	//(measured after M106 S255 with M303 E0 S200 C8)  Kp: 19.04 Ki: 1.09 Kd: 83.09
-	#define  DEFAULT_Kp 19.04
-	#define  DEFAULT_Ki 1.09
-	#define  DEFAULT_Kd 83.09
+	//(measured after M106 S255 with M303 E0 S220)  Kp: 16.36 Ki: 0.95 Kd: 70.19
+	#define DEFAULT_Kp 16.36
+  #define DEFAULT_Ki 0.95
+  #define DEFAULT_Kd 70.19
   #endif
 #endif // PIDTEMP
 
